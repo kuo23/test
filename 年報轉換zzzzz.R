@@ -14,7 +14,6 @@
 
 # Target: 使function輸出stock_date為財報公布截止日後一天
 
-
 rm(list = ls()); gc()
 
 if(!require(lubridate)) {install.packages("lubridate")}
@@ -25,16 +24,12 @@ library("dplyr")
 library("lubridate")
 library("readr")
 
-#
-wd <- getwd()
-open_date<-read_tsv(paste0(wd, "/y9999.txt")) %>% 
+open_date<-read_tsv("https://raw.githubusercontent.com/kuo23/test/master/y9999.txt") %>% 
   `colnames<-`(., c("code", "name", "date", "close")) %>% 
   select(date) 
 open_date <- ymd(as.character(open_date$date))
 
-
 ChangeReportDate <- function(date){
-
   year <- as.numeric(substring(date, 1 ,4))
   month <- as.numeric(substring(date, 5 ,6))
   
@@ -62,8 +57,7 @@ ChangeReportDate <- function(date){
   
   while (match(stock_date, open_date, nomatch = 0)==0){
     stock_date <- ymd(stock_date)+1}
-  
-      
+     
     stock_date <- paste0(year(stock_date), 
                          ifelse(month(stock_date)>9, paste0(month(stock_date)),paste0("0",month(stock_date))),
                          ifelse(day(stock_date)>9, paste0(day(stock_date)),paste0("0",day(stock_date))))
